@@ -134,7 +134,8 @@ export default function WorksStack({ items, brandLabel, isArabic }: { items: Sta
   return (
     <div className="wstack" ref={trackRef} style={{ ["--wstack-count" as string]: count }}>
       <div className="wstack-sticky">
-        {/* Desktop only: the front project's extra images float in the space around the deck. */}
+        <div className="wstack-deck">
+        {/* Desktop only: the front project's extra images sit beside the card, partly tucked behind it. */}
         {items.map((item, i) => item.gallery?.length ? (
           <div key={item.id} className={`wstack-gallery${i === active ? " is-on" : ""}`} aria-hidden={i !== active}>
             {item.gallery.slice(0, 4).map((src, g) => (
@@ -144,7 +145,6 @@ export default function WorksStack({ items, brandLabel, isArabic }: { items: Sta
             ))}
           </div>
         ) : null)}
-        <div className="wstack-deck">
           {items.map((item, i) => {
             const depth = (i - active + count) % count;
             const isFront = depth === 0;

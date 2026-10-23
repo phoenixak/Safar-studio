@@ -25,6 +25,7 @@
 }
 .wstack-deck {
   position: relative;
+  flex-shrink: 0;
   display: grid;
   width: var(--wstack-w);
   perspective: calc(var(--wstack-w) * 1.2);
@@ -102,6 +103,7 @@
   padding: 4px 9px;
   border-radius: 3px;
   background: var(--wstack-yellow);
+  box-shadow: 0 0 0 1px rgba(13, 43, 82, 0.14), 0 2px 6px -2px rgba(13, 43, 82, 0.35); /* keeps tags readable on yellow images */
   color: var(--navy);
   font: 600 12px/1.4 "Noto Kufi Arabic", sans-serif;
   opacity: 0;
@@ -118,6 +120,7 @@
 /* Tab rail under the deck with a sliding coral pill. */
 .wstack-rail {
   position: relative;
+  flex-shrink: 0;
   z-index: 30;
   max-width: min(92vw, 640px);
   overflow-x: auto;
@@ -150,10 +153,14 @@
 .wstack-tabs button.is-active { color: #fff; }
 .wstack-tabs button:focus-visible { outline: 2px solid var(--navy); outline-offset: 2px; border-radius: 8px; }
 
-/* Extra images around the deck, desktop only. Each project's set fades in when it reaches the front. */
+/* Extra images beside the card, desktop only. Positions are relative to the card, two on each side,
+   the inner ones tucked slightly behind its edges. Each project's set fades in when it reaches the front. */
 .wstack-gallery { display: none; }
 @media (min-width: 1100px) {
-  .wstack-gallery { display: block; position: absolute; inset: 0; pointer-events: none; }
+  /* Card width from the screen height: the peeking cards, the card (image + text) and the tab rail must all fit. */
+  .wstack { --wstack-w: min(30rem, calc((100svh - 250px) / 1.45)); --float-w: clamp(150px, 13vw, 250px); }
+  .wstack-rail { max-width: min(100%, 980px); }
+  .wstack-gallery { display: block; position: absolute; inset: 0; z-index: 0; pointer-events: none; }
   .wstack-float {
     position: absolute;
     margin: 0;
@@ -168,10 +175,10 @@
   .wstack-float img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 8px; }
   .wstack-gallery.is-on .wstack-float { opacity: 1; transform: none; transform: rotate(var(--tilt)); animation: wstack-drift 7s ease-in-out infinite alternate; }
   .wstack-gallery:not(.is-on) .wstack-float { transition-duration: 0.25s; }
-  .wstack-float--1 { --tilt: -4deg; width: clamp(130px, 13vw, 190px); top: 12%; left: 5%; }
-  .wstack-float--2 { --tilt: 3deg; width: clamp(150px, 15vw, 220px); bottom: 14%; left: 11%; animation-delay: -2s !important; }
-  .wstack-float--3 { --tilt: 4deg; width: clamp(150px, 15vw, 220px); top: 16%; right: 7%; animation-delay: -4s !important; }
-  .wstack-float--4 { --tilt: -3deg; width: clamp(130px, 13vw, 190px); bottom: 12%; right: 4%; animation-delay: -1s !important; }
+  .wstack-float--1 { --tilt: -5deg; width: var(--float-w); top: 4%; right: calc(100% - 28px); }
+  .wstack-float--2 { --tilt: 3deg; width: calc(var(--float-w) * 0.88); top: 50%; right: calc(100% + 34px); animation-delay: -2s !important; }
+  .wstack-float--3 { --tilt: 4deg; width: var(--float-w); top: 10%; left: calc(100% - 22px); animation-delay: -4s !important; }
+  .wstack-float--4 { --tilt: -3deg; width: calc(var(--float-w) * 0.88); top: 55%; left: calc(100% + 40px); animation-delay: -1s !important; }
 }
 @keyframes wstack-drift { from { translate: 0 -6px; } to { translate: 0 6px; } }
 
